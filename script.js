@@ -1,8 +1,10 @@
+var score=0
 const startButton = document.getElementById('start-btn')
 const questionContainerElement = document.getElementById('question-container')
 const questionElement = document.getElementById('question')
 const answerButtonsElement = document.getElementById('answer-buttons')
 const timeEl =document.getElementById('time')
+
 let shuffledQuestions, currentQuestionIndex
 
 startButton.addEventListener('click', startQuiz)
@@ -16,11 +18,19 @@ function startQuiz() {
 }
 
 function setNextQuestion() {
+    
+    
     showQuestion(shuffledQuestions[currentQuestionIndex])
 }
 
 function showQuestion(question) {
+    if (!question){
+alert("you answered"+score+"/" +questions.length);
+return;
+    }
+    
     questionElement.innerText = question.question
+    answerButtonsElement.innerHTML=""
     question.answers.forEach(answer => {
         const button = document.createElement('button')
         button.innerText = answer.text
@@ -30,16 +40,31 @@ function showQuestion(question) {
         }
         button.addEventListener('click', selectAnswer);
         answerButtonsElement.appendChild(button)
+       
+        
+
     })
 }
 
 function selectAnswer(e) {
     const selectedButton = e.target
     const correct = selectedButton.dataset.correct
+    
+    console.log (selectedButton, correct)  
+    if(correct) {
+        score++;
+    alert("Correct!");
+    } else {
+        alert("Wrong!");
+
+    }
+//alert("you answered"+score+"/" +questions.length);
     setStatusClass(document.body, correct)
     Array.from(answerButtonsElement.children).forEach(button => {
         setStatusClass(button, button.dataset.correct)
     })
+    currentQuestionIndex++
+setNextQuestion()
 }
 
 function setStatusClass(element, correct) {
@@ -124,13 +149,3 @@ function setTime() {
                     }
 setTime();
 
-var score=0
-for(var i=0; i <question.length; i++)
-var response =window.prompt(questions)
-if(response == questions[i].answer) {
-    score++;
-alert("Correct!");
-} else {
-    alert("Wrong!");
-}
-alert("you answered"+score+"/" +questions.length);
